@@ -57,7 +57,7 @@ void draw () {
  line( mouthX1, mouthY1, mouthX2, mouthY2 );
  strokeWeight(mouthOpen);
  line( mouthX1, mouthY1, mouthX2, mouthY2 );
- strokeWeight(mouthReset);
+ strokeWeight(mouthReset); //1=Reser
 } //End draw
 //
 void keyPressed () {} // End keyPressed
