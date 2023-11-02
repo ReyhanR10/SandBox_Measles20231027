@@ -5,14 +5,17 @@ float backgroundX, backgroundY, backgroundWidth, backgroundHeight;
 float leftEyeX, leftEyeY, rightEyeX, rightEyeY, eyeDiameter;
 float noseX1, noseY1, noseX2, noseY2, noseX3, noseY3;
 float mouthX1, mouthY1, mouthX2, mouthY2, mouthOpen, mouthReset;
+float measlesX, measlesY, measlesDiameter;
+float smallerDimension;
+color resetColour=#FFFFFF;
 //
 void setup() {
   fullScreen () ;
   appWidth = width;
   appHeight = height;
   //Ternary Operator
-  int smallerDimension = (appWidth >= appHeight) ? appHeight : appWidth;
-  println( "Smaller DImension is", smallerDimension);
+  smallerDimension = (appWidth >= appHeight) ? appHeight : appWidth;
+  println( "Smaller Dimension is", smallerDimension);
   //
   //Population
   faceX = appWidth*1/2;
@@ -39,8 +42,14 @@ void setup() {
   mouthY2 = mouthY1 ;
   mouthOpen = smallerDimension*1/8;
   mouthReset = smallerDimension/smallerDimension; //1=reset
+  measlesX = random( 0, appWidth );
+  measlesY = random( 0, appHeight );
+  measlesDiameter = random( smallerDimension*1/80, smallerDimension*1/30 );
+  ellipse( measlesX, measlesY, measlesDiameter, measlesDiameter );
   //
   //DIVs
+  rect( backgroundX, backgroundY, backgroundWidth, backgroundHeight );
+ ellipse( faceX, faceY, faceDiameter, faceDiameter ); 
   //ellipse( faceX, faceY, faceDiameter, faceDiameter );
   ellipse ( leftEyeX, leftEyeY, eyeDiameter, eyeDiameter );
   rect( backgroundX, backgroundY, smallerDimension/2-sqrt(sq(smallerDimension/2)/2), smallerDimension/2-sqrt(sq(smallerDimension/2)/2) );
@@ -49,15 +58,23 @@ void setup() {
 } // End setup
 //
 void draw () {
- //rect( backgroundX, backgroundY, backgroundWidth, backgroundHeight );
- ellipse( faceX, faceY, faceDiameter, faceDiameter ); 
  ellipse( leftEyeX, leftEyeY, eyeDiameter, eyeDiameter );
  ellipse( rightEyeX, rightEyeY, eyeDiameter, eyeDiameter );
  triangle( noseX1, noseY1, noseX2, noseY2, noseX3, noseY3  );
  line( mouthX1, mouthY1, mouthX2, mouthY2 );
  strokeWeight(mouthOpen);
  line( mouthX1, mouthY1, mouthX2, mouthY2 );
- strokeWeight(mouthReset); //1=Reser
+ strokeWeight(mouthReset); //1=Reset
+ //
+ color measlesColour = color( 255, random( 0,86), random(0, 100) );
+ fill(measlesColour);
+ measlesX = random( backgroundX, backgroundX+backgroundWidth );
+ measlesY = random( backgroundY,backgroundY+backgroundHeight );
+ measlesDiameter = random( smallerDimension*1/80, smallerDimension*1/30 );
+ noStroke();
+ ellipse( measlesX, measlesY, measlesDiameter, measlesDiameter );
+ stroke(1); //default is 1  
+ fill(resetColour);
 } //End draw
 //
 void keyPressed () {} // End keyPressed
