@@ -6,8 +6,13 @@ float leftEyeX, leftEyeY, rightEyeX, rightEyeY, eyeDiameter;
 float noseX1, noseY1, noseX2, noseY2, noseX3, noseY3;
 float mouthX1, mouthY1, mouthX2, mouthY2, mouthOpen, mouthReset;
 float measlesX, measlesY, measlesDiameter;
+float button1X, button1Y, button2X, button2Y, button3X, button3Y, buttonSide;
 float smallerDimension;
-color resetColour=#FFFFFF;
+Boolean measlesON=false, splashScreen=false;
+color red=#E31717, blue = #131BEA, yellow = #EFF716, resetColour=#FFFFFF;
+String start="Start", stop="STOP", quit="QUIT";
+PFont buttonFont;
+color hoverOverColour=resetColour;
 //
 void setup() {
   fullScreen () ;
@@ -42,43 +47,46 @@ void setup() {
   mouthY2 = mouthY1 ;
   mouthOpen = smallerDimension*1/8;
   mouthReset = smallerDimension/smallerDimension; //1=reset
-  measlesX = random( 0, appWidth );
-  measlesY = random( 0, appHeight );
-  measlesDiameter = random( smallerDimension*1/80, smallerDimension*1/30 );
-  ellipse( measlesX, measlesY, measlesDiameter, measlesDiameter );
+  buttonFont = createFont("Cambria", 70);
   //
   //DIVs
   rect( backgroundX, backgroundY, backgroundWidth, backgroundHeight );
- ellipse( faceX, faceY, faceDiameter, faceDiameter ); 
-  //ellipse( faceX, faceY, faceDiameter, faceDiameter );
-  ellipse ( leftEyeX, leftEyeY, eyeDiameter, eyeDiameter );
-  rect( backgroundX, backgroundY, smallerDimension/2-sqrt(sq(smallerDimension/2)/2), smallerDimension/2-sqrt(sq(smallerDimension/2)/2) );
+  ellipse( faceX, faceY, faceDiameter, faceDiameter ); 
+  //4 Inscribed buttons on the background square not on the circle
+  //Solve Isolceles leg length to find rect() width and height
+  //2x^2 = radius^2
+  buttonSide = smallerDimension/2-sqrt( sq(smallerDimension/2)/2);
+  button1X = backgroundX;
+  button1Y = backgroundY;
+  button2X = backgroundX+faceDiameter-buttonSide;
+  button2Y = button1Y;
+  button3X = button2X;
+  button3Y = backgroundY+faceDiameter-buttonSide;
+  rect( button1X, button1Y, buttonSide, buttonSide );
+  rect( button2X, button2Y, buttonSide, buttonSide );
+  rect( button3X, button3Y, buttonSide, buttonSide );
   println(backgroundX, smallerDimension, smallerDimension/2, sq( smallerDimension/2 ), sq( smallerDimension/2 ) /2, sqrt( sq( smallerDimension/2 ) /2 ), smallerDimension/2-sqrt(sq(smallerDimension/2)/2) );
   //
 } // End setup
 //
 void draw () {
- ellipse( leftEyeX, leftEyeY, eyeDiameter, eyeDiameter );
- ellipse( rightEyeX, rightEyeY, eyeDiameter, eyeDiameter );
- triangle( noseX1, noseY1, noseX2, noseY2, noseX3, noseY3  );
- line( mouthX1, mouthY1, mouthX2, mouthY2 );
- strokeWeight(mouthOpen);
- line( mouthX1, mouthY1, mouthX2, mouthY2 );
- strokeWeight(mouthReset); //1=Reset
- //
- color measlesColour = color( 255, random( 0,86), random(0, 100) );
- fill(measlesColour);
- measlesX = random( backgroundX, backgroundX+backgroundWidth );
- measlesY = random( backgroundY,backgroundY+backgroundHeight );
- measlesDiameter = random( smallerDimension*1/80, smallerDimension*1/30 );
- noStroke();
- ellipse( measlesX, measlesY, measlesDiameter, measlesDiameter );
- stroke(1); //default is 1  
- fill(resetColour);
+ //Text Code
+if (splashScreen==false) background(0);
+if (splashScreen==true) MealesProgram();
 } //End draw
 //
-void keyPressed () {} // End keyPressed
+void keyPressed() {
+  if ( key==' ') measlesON=true; 
+  if ( keyCode==BACKSPACE ) measlesON=false; //BOTH DONT NEEDED A KEY==CODED 
+  if ( keyCode==ESC )  println("quit"); 
+} // End keyPressed    
 //
-void mousePressed() {} //End mousePressed
+void mousePressed() {
+  splashScreen=true;
+  //
+  if (mouseX>button1X && mouseX<button1X+buttonSide && mouseY>button1Y && mouseY<button1Y+buttonSide) measlesON=true; 
+  if (mouseX>button2X && mouseX<button2X+buttonSide && mouseY>button2Y && mouseY<button2Y+buttonSide) measlesON=false; //STOP BUTTON
+  if (mouseX>button3X && mouseX<button3X+buttonSide && mouseY>button3Y && mouseY<button3Y+buttonSide) exit();  //QUIT BUTTON 
+} //End mousePressed
 //
 //End Main Program
